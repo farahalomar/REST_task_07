@@ -1,7 +1,7 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView, DestroyAPIView, CreateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from datetime import datetime
-
+from rest_framework.filters import SearchFilter, OrderingFilter
 from .models import Flight, Booking
 from .serializers import FlightSerializer, BookingSerializer, BookingDetailsSerializer, UpdateBookingSerializer, RegisterSerializer, AdminUpdateBookingSerializer
 from .permissions import IsBookingOwner, IsChangable
@@ -10,7 +10,9 @@ from .permissions import IsBookingOwner, IsChangable
 class FlightsList(ListAPIView):
 	queryset = Flight.objects.all()
 	serializer_class = FlightSerializer
-
+	permission_classes = [AllowAny,]
+	filter_backends = [SearchFilter, OrderingFilter,]
+	search_fields = ['destination',]
 
 class BookingsList(ListAPIView):
 	serializer_class = BookingSerializer
